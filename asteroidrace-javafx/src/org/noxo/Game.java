@@ -53,7 +53,7 @@ public class Game extends Application {
 	private int spaceShipSpeedH = 0;
 	private int spaceShipSpeedV = 0;
 
-	private final int spaceShipSpeed = 20;
+	private final int spaceShipSpeed = 15;
 	private final int spaceShipStepSize = 1;
 	
 	private final int STAR_COUNT_L1 = 20;
@@ -121,8 +121,12 @@ public class Game extends Application {
 		
 		animTimer.start();
 		
+	}
+	
+	private void startFPS() {
+
 		final long start = System.currentTimeMillis();
-		
+
 		fpsTimer.scheduleAtFixedRate(new TimerTask() {
 			
 			@Override
@@ -132,7 +136,7 @@ public class Game extends Application {
 				fps = frames * 1000 / execTime;
 			}
 		}, 1000, 1000);
-	
+		
 	}
 	
 	private void gameLoop() {
@@ -146,6 +150,10 @@ public class Game extends Application {
 		}	
 		
 		renderGame();
+		
+		if (frames == 0)
+			startFPS();
+		
 		frames++;
 		
 	}
@@ -176,20 +184,20 @@ public class Game extends Application {
 
 		gc.setFill(Color.rgb(0,255,0));
 		double el = 100 * (  energy / 100f );
-		gc.fillRect(w-100,5,el,10);
+		gc.fillRect(w-250,30,el,10);
 		
 		// score
 		gc.setFill(Color.rgb(255, 255, 255));
-		gc.fillText(String.valueOf(score),w-100, 25);
+		gc.fillText(String.valueOf(score),w-250, 55);
 		
 		// fps
 		
-		gc.fillText("FPS: " + fps,20, 25);
+		gc.fillText("FPS: " + fps,30, 30);
 
 		// gameover
 		if (gameOver) {
 			gc.setFill(Color.rgb(255, 0,0));
-			gc.fillText("Game over",w-100, 40);
+			gc.fillText("Game over",w-250, 30);
 		}
 
 	}
