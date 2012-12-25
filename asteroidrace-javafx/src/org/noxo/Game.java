@@ -1,6 +1,8 @@
 package org.noxo;
 
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import javafx.animation.AnimationTimer;
@@ -82,7 +84,10 @@ public class Game extends Application {
 			0xFFDEDEDE, 0xFFDEDEDE,
 			0xFFDEDEDE, 0xFFDEDEDE
 	};
-
+	
+	Timer fpsTimer = new Timer();
+	long fps, frames;
+	
 	@Override
 	public void start(final Stage stage) throws Exception {
 	
@@ -115,6 +120,19 @@ public class Game extends Application {
 		};
 		
 		animTimer.start();
+		
+		final long start = System.currentTimeMillis();
+		
+		fpsTimer.scheduleAtFixedRate(new TimerTask() {
+			
+			@Override
+			public void run() {
+				long now = System.currentTimeMillis();
+				long execTime = now - start;
+				fps = frames * 1000 / execTime;
+			}
+		}, 1000, 1000);
+	
 	}
 	
 	private void gameLoop() {
@@ -124,9 +142,11 @@ public class Game extends Application {
 		if (energy <= 0) {
 			gameOver = true;
 			animTimer.stop();
+			fpsTimer.cancel();
 		}	
 		
 		renderGame();
+		frames++;
 		
 	}
 	
@@ -161,6 +181,10 @@ public class Game extends Application {
 		// score
 		gc.setFill(Color.rgb(255, 255, 255));
 		gc.fillText(String.valueOf(score),w-100, 25);
+		
+		// fps
+		
+		gc.fillText("FPS: " + fps,20, 25);
 
 		// gameover
 		if (gameOver) {
