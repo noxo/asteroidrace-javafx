@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -445,9 +446,14 @@ public class Game extends Application {
 		if (event.getCode() == KeyCode.DOWN) {
 			spaceShipMoveH = 1;
 		}
+		if (event.getCode() == KeyCode.ESCAPE) {
+			animTimer.stop();
+			fpsTimer.cancel();
+			Platform.exit();
+		}
 
 	}
-	
+
 	public static void main(String arg[]) {
 		launch(arg);
 	}
